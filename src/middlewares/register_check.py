@@ -46,7 +46,7 @@ class RegisterCheck(BaseMiddleware):
                             await session.commit()
                         else:
 
-                            await redis.set(name=event.from_user.id,value=1)
+                            await redis.set(name=event.from_user.id,value=0)
 
                             user = Auth(
                                 user_id=event.from_user.id,
