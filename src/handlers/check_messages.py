@@ -16,7 +16,7 @@ async def get_message(message: Message, session: AsyncSession):
     text = message.text
 
     if text is not None:
-        text = message.from_user.full_name + '\n' + text +';\n\n'
+        text = message.from_user.full_name + '\n' + text +';\n'
         chat_id = message.chat.id
 
 

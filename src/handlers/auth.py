@@ -34,10 +34,8 @@ async def bot_added(message: Message, session: AsyncSession):
 
     chat_id = message.chat.id
     chatname = message.chat.full_name
-    new_chat = await add_chat(session, chat_id=chat_id, chatname=chatname)
-    if new_chat == True:
+    await add_chat(session, chat_id=chat_id, chatname=chatname)
 
-        await message.answer(text=f"Привет! Спасибо, что добавили меня в группу")
 
 
 
