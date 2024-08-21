@@ -128,11 +128,11 @@ async def get_info_about_active_chat(session: AsyncSession, chat_id: int):
 async def chat_closed_service(session: AsyncSession, chat_id: int):
     await redis.delete(str(chat_id) + 'global')
     await redis.delete(str(chat_id) + 'filter')
-    cache = await redis.get(name=str(chat_id) + 'chat')
+    cache = await redis.get(name=str(chat_id) + 'info')
     if cache is not None:
         cache = cache.decode('utf-8')
         await appent_info_in_bd(session=session, textx=cache, chat_id=int(chat_id))
-        await redis.delete(str(chat_id) + 'chat')
+        await redis.delete(str(chat_id) + 'info')
     try:
         result = await session.execute(update(Chat).where(Chat.chat_id == chat_id).values(archiv=True))
         await session.commit()

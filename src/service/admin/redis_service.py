@@ -20,7 +20,7 @@ async def clear_cache_not_chat_cache():
         return {}
     # Преобразование байтов в строки для ключей
     keys = [key.decode('utf-8') for key in keys]
-    keys_to_remove = [key for key in keys if 'chat' not in key]
+    keys_to_remove = [key for key in keys if 'info' not in key]
     if keys_to_remove:
         return await redis.delete(*keys_to_remove)
 
@@ -31,11 +31,11 @@ async def load_chat_cache(session: AsyncSession):
     if not keys:
         return {}
     keys = [key.decode('utf-8') for key in keys]
-    keys_to_load = [key for key in keys if 'chat' in key]
+    keys_to_load = [key for key in keys if 'info' in key]
     if keys_to_load:
         for i in keys_to_load:
             cache = await redis.get(i)
-            chat_id = int(i.replace('chat', ''))
+            chat_id = int(i.replace('info', ''))
             if cache is not None:
                 cache = cache.decode('utf-8')
                 await appent_info_in_bd(session=session, textx=cache, chat_id=chat_id)

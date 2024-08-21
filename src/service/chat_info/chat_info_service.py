@@ -9,7 +9,7 @@ from structure.misc import redis
 
 
 async def check_memory_and_date(message: Message, text: str, session: AsyncSession, chat_id: int):
-    memory_usage: int = await redis.memory_usage(str(message.chat.id) + 'chat')
+    memory_usage: int = await redis.memory_usage(str(message.chat.id) + 'info')
     max_range = 31457280
     if memory_usage is None:
         memory_usage = 0
@@ -30,21 +30,21 @@ async def check_memory_and_date(message: Message, text: str, session: AsyncSessi
     # today_cache_data = today_cache_data.replace(minute=0, second=0, microsecond=0, hour=0)
 
     if today_date > today_cache_data or memory_usage >= max_range:
-        print('сработало условие')
-        print(today_date, type(today_date), 'today_date')
-        print(today_cache_data, type(today_cache_data), 'today_cache_data')
+        # print('сработало условие')
+        # print(today_date, type(today_date), 'today_date')
+        # print(today_cache_data, type(today_cache_data), 'today_cache_data')
 
         await redis.set(name=str(message.chat.id) + 'time', value=str(datetime.today()))
-        cache_chat_data = await redis.get(name=str(chat_id) + 'chat')
+        cache_chat_data = await redis.get(name=str(chat_id) + 'info')
         if not cache_chat_data:
             return
         cache_chat_data = cache_chat_data.decode('utf-8')
         await appent_info_in_bd(session=session, textx=cache_chat_data, chat_id=chat_id)
-        await redis.delete(str(chat_id) + 'chat')
+        await redis.delete(str(chat_id) + 'info')
 
 
     else:
-        await redis.append(str(message.chat.id) + 'chat', str(text) + '\n')
+        await redis.append(str(message.chat.id) + 'info', str(text) + '\n')
 
 
 async def appent_info_in_bd(session: AsyncSession, textx: str, chat_id: int):
