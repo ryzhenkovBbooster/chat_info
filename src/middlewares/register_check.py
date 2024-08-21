@@ -55,6 +55,6 @@ class RegisterCheck(BaseMiddleware):
                             )
                             await session.merge(user)
                             await session.commit()
-                            await event.answer(f"Пользователь с логином {event.from_user.username} авторизован")
+                            # await event.answer(f"Пользователь с логином {event.from_user.username} авторизован")
             return await handler(event,data)
         return await handler(event,data)
