@@ -279,6 +279,7 @@ async def it_true_info(callback: CallbackQuery, state: FSMContext, session: Asyn
 
 @router.message(F.text.lower() == 'get cache', UserAccessFilter(session_pool=sessionmaker))
 async def get_all_cache(message: Message):
+    cursor = 0
     all_keys_values = {}
     while True:
         cursor, keys = await redis.scan(cursor=cursor, match='*', count=100)
