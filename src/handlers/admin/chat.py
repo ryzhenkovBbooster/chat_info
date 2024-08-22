@@ -290,8 +290,7 @@ async def get_all_cache(message: Message):
         for key in keys:
             all_keys_values[key.decode('utf-8')] = (await redis.get(key)).decode('utf-8')
 
-    redis.close()
-    await redis.wait_closed()
+
 
     # Вывод всех ключей и значений
     for key, value in all_keys_values.items():
