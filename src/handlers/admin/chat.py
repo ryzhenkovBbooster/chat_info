@@ -277,3 +277,18 @@ async def it_true_info(callback: CallbackQuery, state: FSMContext, session: Asyn
 
 
 
+@router.message(F.text.lower() == 'get cache', UserAccessFilter(session_pool=sessionmaker))
+async def get_all_cache(message: Message):
+    all_keys_values = {}
+    while True:
+        cursor, keys = await redis.scan(cursor=cursor, match='*', count=100)
+        for key in keys:
+            all_keys_values[key.decode('utf-8')] = await redis.get(key).decode('utf-8')
+        if cursor == 0:
+            break
+
+    # Вывод всех ключей и значений
+    for key, value in all_keys_values.items():
+        print(f"Key: {key}, Value: {value}")
+
+    await message.answer('success')
