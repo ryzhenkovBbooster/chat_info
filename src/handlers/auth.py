@@ -18,16 +18,18 @@ router = Router()
 
 @router.message(AddOrUpdateChatFilter())
 async def bot_added(message: Message, session: AsyncSession):
-    if message.migrate_from_chat_id:
-        old_chat_id = message.migrate_from_chat_id
+    if message.migrate_from_chat_id or message.migrate_to_chat_id:
+        print(message.chat.id, 'message')
+
+        old_chat_id = message.migrate_from_chat_id or message.migrate_to_chat_id
         new_chat_id = message.chat.id
         update = await update_to_supergroup(session, int(old_chat_id), int(new_chat_id))
         if update == False:
             pass
         else:
-            cache = await redis.get(str(old_chat_id) + 'chat')
+            cache = await redis.get(str(old_chat_id) + 'info')
             if cache is not None:
-                await redis.rename(str(old_chat_id) + 'chat', str(new_chat_id) + 'chat')
+                await redis.rename(str(old_chat_id) + 'info', str(new_chat_id) + 'info')
                 await clear_cache_not_chat_cache()
 
 

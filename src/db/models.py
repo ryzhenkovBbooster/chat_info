@@ -28,7 +28,8 @@ class Chat(Base):
     active_chat = Column(Boolean, unique=False, nullable=False, default=False)
     add_or_left = Column(Boolean, unique=False, nullable=False, default=True)
     archiv = Column(Boolean, unique=False, nullable=False, default=False)
-    chat = relationship("ChatInfo", backref='chat_info')
+    chat = relationship("ChatInfo", backref='chat_info', cascade="all, delete-orphan",
+        passive_deletes=True)
 
     def __str__(self) -> str:
         return f"<CHAT: {self.chatname, self.chat_id, self.active_chat}>"
@@ -36,7 +37,7 @@ class Chat(Base):
 class ChatInfo(Base):
     __tablename__ = 'chat_info'
     id = Column(Integer, unique=True, primary_key=True, autoincrement=True)
-    chat = Column(BigInteger, ForeignKey("tg_chat.chat_id"), nullable=True, unique=True, onupdate="CASCADE")
+    chat = Column(BigInteger, ForeignKey("tg_chat.chat_id", ondelete='CASCADE', onupdate='CASCADE'), nullable=True, unique=True, onupdate="CASCADE")
     resident_id = Column(BigInteger, unique=False, nullable=False)
     messages = Column(Text, unique=False, nullable=True)
 

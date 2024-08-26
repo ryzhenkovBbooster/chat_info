@@ -25,6 +25,8 @@ services:
     restart: unless-stopped
     volumes:
       - redis_data:/data
+      - ./init.sh:/usr/local/bin/init.sh
+    command: [ "sh", "-c", "/usr/local/bin/init.sh & redis-server" ]
   postgres:
     image: postgres:latest
     container_name: postgres
