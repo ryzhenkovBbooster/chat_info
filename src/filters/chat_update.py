@@ -7,7 +7,8 @@ class AddOrUpdateChatFilter(BaseFilter):
 
 
     async def __call__(self, message: Message):
-        if message.migrate_from_chat_id:
+
+        if message.migrate_from_chat_id or message.migrate_to_chat_id:
             return True
         if message.new_chat_members:
             for user in message.new_chat_members:
