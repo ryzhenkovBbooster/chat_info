@@ -25,14 +25,14 @@ services:
     restart: unless-stopped
     volumes:
       - redis_data:/data
-      - ./init.sh:/usr/local/bin/init.sh
-    command: [ "sh", "-c", "/usr/local/bin/init.sh & redis-server" ]
+
+    command: [ "sh", "-c", "redis-server" ]
   postgres:
     image: postgres:latest
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ;b;f4522
+      POSTGRES_PASSWORD: ${PG_PASS}
       POSTGRES_DB: postgres
 
     volumes:
