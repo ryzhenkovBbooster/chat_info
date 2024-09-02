@@ -11,6 +11,7 @@ from structure.misc import redis
 async def check_memory_and_date(message: Message, text: str, session: AsyncSession, chat_id: int):
     cache_chat_data = await redis.get(name=str(chat_id) + 'info')
     if not cache_chat_data:
+        await redis.set(name=str(chat_id) + 'info', value=str(text) + '\n')
         return
     cache_chat_data = cache_chat_data.decode('utf-8')
     if len(cache_chat_data) >= 1000:
