@@ -13,14 +13,21 @@ async def check_memory_and_date(message: Message, text: str, session: AsyncSessi
     if not cache_chat_data:
         await redis.set(name=str(chat_id) + 'info', value=str(text) + '\n')
         return
+
+
     cache_chat_data = cache_chat_data.decode('utf-8')
+
     if len(cache_chat_data) >= 1000:
         await redis.append(str(message.chat.id) + 'info', str(text) + '\n')
-        await appent_info_in_bd(session=session, textx=cache_chat_data, chat_id=chat_id)
         await redis.delete(str(chat_id) + 'info')
+        await redis.set(name=str(chat_id) + 'info', value=str(text) + '\n')
 
+        await appent_info_in_bd(session=session, textx=cache_chat_data, chat_id=chat_id)
     else:
         await redis.append(str(message.chat.id) + 'info', str(text) + '\n')
+
+
+
 
 
 
