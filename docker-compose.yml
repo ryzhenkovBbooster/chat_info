@@ -25,7 +25,8 @@ services:
     restart: unless-stopped
     volumes:
       - redis_data:/data
-
+    networks:
+      - internal_network
     command: [ "sh", "-c", "redis-server" ]
   postgres:
     image: postgres:latest
@@ -46,3 +47,6 @@ volumes:
   redis_data:
     driver: local
 
+networks:
+  internal_network:
+    driver: bridge
