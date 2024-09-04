@@ -13,6 +13,8 @@ services:
       - .env
     depends_on:
       - redis
+    networks:
+      - internal_network
     restart: unless-stopped
 #    volumes:
 #      - .:/app
@@ -21,7 +23,7 @@ services:
     container_name: redis
     image: redis:latest
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     restart: unless-stopped
     volumes:
       - redis_data:/data
@@ -35,7 +37,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${PG_PASS}
       POSTGRES_DB: postgres
-
+    networks:
+      - internal_network
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
